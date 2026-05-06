@@ -73,7 +73,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>btn.obsd.eon</string>
+				<string>your-auth-schema</string>
 			</array>
 		</dict>
 	</array>

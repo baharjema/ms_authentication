@@ -28,7 +28,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="btn.obsd.eon" android:host="auth" android:path="/login" />
+                <data android:scheme="your-auth-schema" android:host="auth" android:path="{/your-default-path}" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
