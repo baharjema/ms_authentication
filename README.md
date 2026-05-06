@@ -59,6 +59,22 @@ Add the intent filter to your `AndroidManifest.xml` to handle the redirect:
 #### iOS Setup
 (Implementation for iOS follows similar patterns using ASWebAuthenticationSession)
 
+Add this to your Info.plist:
+
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>your-auth-schema</string>
+        </array>
+    </dict>
+</array>
+```
+
 ---
 
 ## 🚀 Usage
