@@ -1,8 +1,8 @@
 name: ms_authenticate
 description: "A new Flutter plugin project."
 version: 0.0.1
-homepage: "https://wongflores.my.id"
-repository: "https://github.com/baharjema/ms_authenticate"
+homepage: "https://github.com/baharjema/ms_authentication.git"
+repository: "https://github.com/baharjema/ms_authentication.git"
 
 environment:
   sdk: ^3.11.5
