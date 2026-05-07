@@ -30,10 +30,10 @@ class MethodChannelMsAuthenticate extends MsAuthenticatePlatform {
         .invokeMethod<Map<Object?, Object?>?>('loginWithMicrosoft', {
           'tenantId': tenantId,
           'clientId': clientId,
-          if (clientSecret != null) 'clientSecret': clientSecret,
+          'clientSecret': ?clientSecret,
           'redirectUrl': redirectUrl,
           'scope': scope,
-          if (tokenScope != null) 'tokenScope': tokenScope,
+          'tokenScope': ?tokenScope,
         });
     return token;
   }
@@ -51,10 +51,10 @@ class MethodChannelMsAuthenticate extends MsAuthenticatePlatform {
         .invokeMethod<Map<Object?, Object?>?>('exchangeCodeForToken', {
           'tenantId': tenantId,
           'clientId': clientId,
-          if (clientSecret != null) 'clientSecret': clientSecret,
+          'clientSecret': ?clientSecret,
           'code': code,
           'redirectUrl': redirectUrl,
-          if (scope != null) 'scope': scope,
+          'scope': ?scope,
         });
     return result;
   }
