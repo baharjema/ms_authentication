@@ -35,7 +35,7 @@ The plugin uses high-end native components to provide an "in-app" browser feel, 
 3.  Add a **Redirect URI**. This must match the `redirectUrl` you use in the code, typically in the format: `your.custom.scheme://auth/login`.
 4.  Note your **Client ID (Application ID)**.
 
-![Screen Redirect Uri](docs/image.png)
+![Screen Redirect Uri](doc/image.png)
 
 ### 1. Installation
 
