@@ -26,6 +26,17 @@ The plugin uses high-end native components to provide an "in-app" browser feel, 
 
 ## 🛠 Getting Started
 
+### 0. Prerequisites
+
+**IMPORTANT**: For the native token exchange to work correctly on both platforms, you must register your custom URL scheme with Microsoft Entra ID (Azure AD).
+
+1.  **Register an Application** in [Microsoft Entra ID](https://portal.azure.com).
+2.  Go to **Authentication** > **Add a platform** > **Mobile and desktop applications**.
+3.  Add a **Redirect URI**. This must match the `redirectUrl` you use in the code, typically in the format: `your.custom.scheme://auth/login`.
+4.  Note your **Client ID (Application ID)**.
+
+![Screen Redirect Uri](docs/image.png)
+
 ### 1. Installation
 
 Add `ms_authenticate` to your `pubspec.yaml`:
