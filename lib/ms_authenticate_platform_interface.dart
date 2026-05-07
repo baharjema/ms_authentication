@@ -46,7 +46,9 @@ abstract class MsAuthenticatePlatform extends PlatformInterface {
     required String redirectUrl,
     String? scope,
   }) {
-    throw UnimplementedError('exchangeCodeForToken() has not been implemented.');
+    throw UnimplementedError(
+      'exchangeCodeForToken() has not been implemented.',
+    );
   }
 
   Future<void> logout() {

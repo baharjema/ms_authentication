@@ -18,7 +18,10 @@ class MockMsAuthenticatePlatform
     required String redirectUrl,
     required String scope,
     String? tokenScope,
-  }) => Future.value({'id_token': 'mock_id_token', 'access_token': 'mock_access_token'});
+  }) => Future.value({
+    'id_token': 'mock_id_token',
+    'access_token': 'mock_access_token',
+  });
 
   @override
   Future<Map<Object?, Object?>?> exchangeCodeForToken({
@@ -28,14 +31,18 @@ class MockMsAuthenticatePlatform
     required String code,
     required String redirectUrl,
     String? scope,
-  }) => Future.value({'id_token': 'mock_id_token', 'access_token': 'mock_access_token'});
+  }) => Future.value({
+    'id_token': 'mock_id_token',
+    'access_token': 'mock_access_token',
+  });
 
   @override
   Future<void> logout() => Future.value();
 }
 
 void main() {
-  final MsAuthenticatePlatform initialPlatform = MsAuthenticatePlatform.instance;
+  final MsAuthenticatePlatform initialPlatform =
+      MsAuthenticatePlatform.instance;
 
   test('$MethodChannelMsAuthenticate is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelMsAuthenticate>());
