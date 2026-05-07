@@ -1,3 +1,8 @@
+## 0.0.4
+
+* Fixed screenshots folder name in README.md.
+* Fix Dart code format.
+
 ## 0.0.3
 
 * Add docs for prerequisites and screenshots azure configuration.
