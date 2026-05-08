@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Remove dependency web platform to http
+
 ## 0.0.6
 
 * Added nonce parameter to `loginWithMicrosoft` method.

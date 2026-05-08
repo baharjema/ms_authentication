@@ -32,7 +32,7 @@ The plugin uses high-end native components to provide an "in-app" browser feel, 
 
 1.  **Register an Application** in [Microsoft Entra ID](https://portal.azure.com).
 2.  Go to **Authentication** > **Add a platform** > **Mobile and desktop applications**.
-3.  Add a **Redirect URI**. This must match the `redirectUrl` you use in the code, typically in the format: `your.custom.scheme://auth/login`.
+3.  Add a **Redirect URI**. This must match the `redirectUrl` you use in the code, typically in the format: `your.custom.scheme://auth/{your-default-path}`.
 4.  Note your **Client ID (Application ID)**.
 
 ![Screen Redirect Uri](doc/image.png)
@@ -102,7 +102,7 @@ Future<void> login() async {
     final tokenData = await _msAuth.loginWithMicrosoft(
       tenantId: 'your-tenant-id',
       clientId: 'your-client-id',
-      redirectUrl: 'your.custom.scheme://auth/login',
+      redirectUrl: 'your.custom.scheme://auth/login',//default path : login
       scope: 'openid profile email offline_access',
     );
 

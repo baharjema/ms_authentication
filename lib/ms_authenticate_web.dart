@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:js_interop';
 import 'dart:math';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:http/http.dart' as http;
 import 'package:web/web.dart' as web;
 
 import 'ms_authenticate_platform_interface.dart';
@@ -150,7 +150,6 @@ class MsAuthenticateWeb extends MsAuthenticatePlatform {
   }) async {
     final urlString =
         'https://login.microsoftonline.com/$tenantId/oauth2/v2.0/token';
-    final url = Uri.parse(urlString);
 
     final params = <String, String>{
       'client_id': clientId,
@@ -166,23 +165,35 @@ class MsAuthenticateWeb extends MsAuthenticatePlatform {
       params['scope'] = scope;
     }
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: params,
-      );
+    final headers = web.Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonObject = jsonDecode(response.body);
+    final bodyContent = params.entries
+        .map(
+          (e) =>
+              '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}',
+        )
+        .join('&');
+
+    final init = web.RequestInit(
+      method: 'POST',
+      headers: headers,
+      body: bodyContent.toJS,
+    );
+
+    try {
+      final response = await web.window.fetch(urlString.toJS, init).toDart;
+      final textJs = await response.text().toDart;
+      final text = textJs.toDart;
+
+      if (response.ok) {
+        final Map<String, dynamic> jsonObject = jsonDecode(text);
         return jsonObject;
       } else {
-        throw Exception(
-          'Response code: \${response.statusCode}, error: \${response.body}',
-        );
+        throw Exception('Response code: ${response.status}, error: $text');
       }
     } catch (e) {
-      throw Exception('NETWORK_ERROR: \${e.toString()}');
+      throw Exception('NETWORK_ERROR: ${e.toString()}');
     }
   }
 
