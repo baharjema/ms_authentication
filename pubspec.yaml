@@ -1,6 +1,6 @@
 name: ms_authenticate
 description: "A premium, native Flutter plugin for seamless Microsoft Azure Active Directory authentication. Built with performance, security, and user experience in mind."
-version: 0.0.5
+version: 0.0.6
 homepage: "https://wongflores.my.id"
 repository: "https://github.com/baharjema/ms_authentication.git"
 
@@ -11,7 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.6.0
   plugin_platform_interface: ^2.0.2
+  web: ^1.1.1
+  flutter_web_plugins:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +44,9 @@ flutter:
         pluginClass: MsAuthenticatePlugin
       ios:
         pluginClass: MsAuthenticatePlugin
+      web:
+        pluginClass: MsAuthenticateWeb
+        fileName: ms_authenticate_web.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

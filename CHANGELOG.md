@@ -1,3 +1,9 @@
+## 0.0.6
+
+* Added nonce parameter to `loginWithMicrosoft` method.
+* Add web platform support.
+* Update dependencies.
+
 ## 0.0.5
 
 * Added check mounted in example.

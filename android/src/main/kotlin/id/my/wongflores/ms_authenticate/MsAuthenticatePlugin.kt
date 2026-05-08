@@ -51,6 +51,7 @@ class MsAuthenticatePlugin :
                 val redirectUrl = call.argument<String>("redirectUrl")
                 val scope = call.argument<String>("scope")
                 val tokenScope = call.argument<String>("tokenScope")
+                val nonce = call.argument<String>("nonce")
 
                 if (tenantId != null && clientId != null && redirectUrl != null && scope != null) {
                     loginWithMicrosoft(
@@ -60,6 +61,7 @@ class MsAuthenticatePlugin :
                         redirectUrl = redirectUrl,
                         scope = scope,
                         tokenScope = tokenScope,
+                        nonce = nonce,
                         result = result
                     )
                 } else {
@@ -132,6 +134,7 @@ class MsAuthenticatePlugin :
         redirectUrl: String,
         scope: String,
         tokenScope: String?,
+        nonce: String?,
         result: Result
     ) {
         if (activity == null) {
@@ -152,7 +155,8 @@ class MsAuthenticatePlugin :
             tenantId = tenantId,
             clientId = clientId,
             redirectUrl = redirectUrl,
-            scope = scope
+            scope = scope,
+            nonce = nonce
         )
 
         Log.d(TAG, "Auth URL: $authUrl")
@@ -187,18 +191,23 @@ class MsAuthenticatePlugin :
         tenantId: String,
         clientId: String,
         redirectUrl: String,
-        scope: String
+        scope: String,
+        nonce: String?
     ): String {
         val baseUrl = "https://login.microsoftonline.com/$tenantId/oauth2/v2.0/authorize"
-        val params = mapOf(
+        val params = mutableMapOf(
             "client_id" to clientId,
             "response_type" to "code",
             "redirect_uri" to redirectUrl,
             "response_mode" to "query",
             "scope" to scope,
-            "state" to "bebas_asal_unik_123",
+            "state" to java.util.UUID.randomUUID().toString().replace("-", ""),
             "prompt" to "login"
         )
+
+        if (nonce != null) {
+            params["nonce"] = nonce
+        }
 
         val queryString = params.entries.joinToString("&") { (key, value) ->
             "$key=${java.net.URLEncoder.encode(value, "UTF-8")}"

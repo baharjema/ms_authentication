@@ -25,6 +25,7 @@ class MethodChannelMsAuthenticate extends MsAuthenticatePlatform {
     required String redirectUrl,
     required String scope,
     String? tokenScope,
+    String? nonce,
   }) async {
     final token = await methodChannel
         .invokeMethod<Map<Object?, Object?>?>('loginWithMicrosoft', {
@@ -34,6 +35,7 @@ class MethodChannelMsAuthenticate extends MsAuthenticatePlatform {
           'redirectUrl': redirectUrl,
           'scope': scope,
           'tokenScope': ?tokenScope,
+          'nonce': ?nonce,
         });
     return token;
   }

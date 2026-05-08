@@ -21,6 +21,7 @@ class MsAuthenticate {
     required String redirectUrl,
     required String scope,
     String? tokenScope,
+    String? nonce,
   }) {
     return MsAuthenticatePlatform.instance.loginWithMicrosoft(
       tenantId: tenantId,
@@ -29,6 +30,7 @@ class MsAuthenticate {
       redirectUrl: redirectUrl,
       scope: scope,
       tokenScope: tokenScope,
+      nonce: nonce,
     );
   }
 

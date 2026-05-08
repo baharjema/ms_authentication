@@ -34,6 +34,7 @@ abstract class MsAuthenticatePlatform extends PlatformInterface {
     required String redirectUrl,
     required String scope,
     String? tokenScope,
+    String? nonce,
   }) {
     throw UnimplementedError('loginWithMicrosoft() has not been implemented.');
   }

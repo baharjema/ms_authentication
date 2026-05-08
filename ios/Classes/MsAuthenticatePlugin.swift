@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import AuthenticationServices
+import Foundation
 
 public class MsAuthenticatePlugin: NSObject, FlutterPlugin, ASWebAuthenticationPresentationContextProviding {
     private var channel: FlutterMethodChannel?
@@ -41,6 +42,7 @@ public class MsAuthenticatePlugin: NSObject, FlutterPlugin, ASWebAuthenticationP
             }
             let clientSecret = args["clientSecret"] as? String
             let tokenScope = args["tokenScope"] as? String
+            let nonce = args["nonce"] as? String
             
             loginWithMicrosoft(
                 tenantId: tenantId,
@@ -49,6 +51,7 @@ public class MsAuthenticatePlugin: NSObject, FlutterPlugin, ASWebAuthenticationP
                 redirectUrl: redirectUrl,
                 scope: scope,
                 tokenScope: tokenScope,
+                nonce: nonce,
                 result: result
             )
             
@@ -94,13 +97,15 @@ public class MsAuthenticatePlugin: NSObject, FlutterPlugin, ASWebAuthenticationP
         redirectUrl: String,
         scope: String,
         tokenScope: String?,
+        nonce: String?,
         result: @escaping FlutterResult
     ) {
         let authUrlStr = buildAuthorizationUrl(
             tenantId: tenantId,
             clientId: clientId,
             redirectUrl: redirectUrl,
-            scope: scope
+            scope: scope,
+            nonce: nonce
         )
         
         guard let authUrl = URL(string: authUrlStr) else {
@@ -242,19 +247,24 @@ public class MsAuthenticatePlugin: NSObject, FlutterPlugin, ASWebAuthenticationP
         tenantId: String,
         clientId: String,
         redirectUrl: String,
-        scope: String
+        scope: String,
+        nonce: String?
     ) -> String {
         let baseUrl = "https://login.microsoftonline.com/\(tenantId)/oauth2/v2.0/authorize"
-        
-        let params: [String: String] = [
+        let currentState = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        var params: [String: String] = [
             "client_id": clientId,
             "response_type": "code",
             "redirect_uri": redirectUrl,
             "response_mode": "query",
             "scope": scope,
-            "state": "bebas_asal_unik_123",
+            "state": currentState,
             "prompt": "login"
         ]
+
+        if let nonce = nonce {
+            params["nonce"] = nonce
+        }
         
         let queryString = params
             .map { key, value in

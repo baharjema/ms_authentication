@@ -18,6 +18,7 @@ class MockMsAuthenticatePlatform
     required String redirectUrl,
     required String scope,
     String? tokenScope,
+    String? nonce,
   }) => Future.value({
     'id_token': 'mock_id_token',
     'access_token': 'mock_access_token',
