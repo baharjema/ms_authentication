@@ -14,6 +14,9 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
+import android.app.Application
+import android.os.Bundle
+
 
 /** MsAuthenticatePlugin */
 class MsAuthenticatePlugin :
@@ -28,6 +31,11 @@ class MsAuthenticatePlugin :
     
     private var pendingResult: Result? = null
     private var currentRedirectUrl: String? = null
+
+    private var isLoginFlowActive = false
+    private var isRedirectHandled = false
+    private var lifecycleCallbacks: Application.ActivityLifecycleCallbacks? = null
+
 
     companion object {
         private const val TAG = "MsAuthenticatePlugin"
@@ -107,18 +115,22 @@ class MsAuthenticatePlugin :
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
         binding.addOnNewIntentListener(this)
+        registerLifecycleCallbacks()
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
+        unregisterLifecycleCallbacks()
         activity = null
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         activity = binding.activity
         binding.addOnNewIntentListener(this)
+        registerLifecycleCallbacks()
     }
 
     override fun onDetachedFromActivity() {
+        unregisterLifecycleCallbacks()
         activity = null
     }
 
@@ -149,6 +161,10 @@ class MsAuthenticatePlugin :
         this.currentClientId = clientId
         this.currentClientSecret = clientSecret
         this.currentTokenScope = tokenScope
+
+        // Reset state flags untuk tracking cancel
+        this.isLoginFlowActive = true
+        this.isRedirectHandled = false
 
         // Build authorization URL
         val authUrl = buildAuthorizationUrl(
@@ -296,6 +312,8 @@ class MsAuthenticatePlugin :
         if (Intent.ACTION_VIEW == action && data != null && currentRedirectUrl != null) {
             // Cek apakah url redirect sesuai
             if (data.startsWith(currentRedirectUrl!!, ignoreCase = true)) {
+                this.isRedirectHandled = true
+                this.isLoginFlowActive = false
                 //Log.d(TAG, "Redirect URI tertangkap: $data")
                 
                 val code = extractCodeFromUrl(data)
@@ -345,6 +363,41 @@ class MsAuthenticatePlugin :
             Log.e(TAG, "Error extracting error: ${e.message}")
             null
         }
+    }
+
+    private fun registerLifecycleCallbacks() {
+        if (lifecycleCallbacks != null) return
+        
+        val application = activity?.application ?: return
+        lifecycleCallbacks = object : Application.ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+            override fun onActivityStarted(activity: Activity) {}
+            
+            override fun onActivityResumed(act: Activity) {
+                if (act == activity) {
+                    if (isLoginFlowActive && !isRedirectHandled) {
+                        Log.d(TAG, "User returned to app without redirect. Assuming cancellation.")
+                        pendingResult?.error("AUTH_CANCELLED", "User cancelled login", null)
+                        pendingResult = null
+                        isLoginFlowActive = false
+                    }
+                }
+            }
+            
+            override fun onActivityPaused(activity: Activity) {}
+            override fun onActivityStopped(activity: Activity) {}
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+            override fun onActivityDestroyed(activity: Activity) {}
+        }
+        application.registerActivityLifecycleCallbacks(lifecycleCallbacks)
+    }
+
+    private fun unregisterLifecycleCallbacks() {
+        val application = activity?.application ?: return
+        lifecycleCallbacks?.let {
+            application.unregisterActivityLifecycleCallbacks(it)
+        }
+        lifecycleCallbacks = null
     }
 
     private fun logout() {

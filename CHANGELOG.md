@@ -1,3 +1,9 @@
+## 0.0.8
+
+* Update methods for user canceled authentication in Android.
+* iOS already handled this.
+* Update docs to match the code.
+
 ## 0.0.7
 
 * Remove dependency web platform to http

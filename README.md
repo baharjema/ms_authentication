@@ -50,13 +50,13 @@ dependencies:
 
 #### Android Setup
 Add the intent filter to your `AndroidManifest.xml` to handle the redirect:
-
+android:path should be "/{your-default-path}" or don't use "android:path" if you don't have a custom path.
 ```xml
 <intent-filter>
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="your.custom.scheme" android:host="auth" android:path="{/your-default-path}" />
+    <data android:scheme="your.custom.scheme" android:host="auth" android:path="/{your-default-path}" />
 </intent-filter>
 </application>
 <queries>

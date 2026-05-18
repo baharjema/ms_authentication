@@ -45,7 +45,7 @@ dependencies:
 ### 2. Configure Android
 
 Ensure your `AndroidManifest.xml` has the intent filter for the redirect URI:
-
+android:path should be "/{your-default-path}" or don't use "android:path" if you don't have a custom path.
 ```xml
 <intent-filter>
     <action android:name="android.intent.action.VIEW" />
